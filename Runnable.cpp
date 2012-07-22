@@ -19,7 +19,7 @@ Runnable::Runnable(HINSTANCE hInstance, std::string caption, int width, int heig
 	mHeight			= height;
 
 	// Init the window.
-	initWindow();
+	//initWindow();
 }
 
 Runnable::~Runnable()
