@@ -1,33 +1,14 @@
 #pragma once
+#include "Runnable.h"
 
-#include <Windows.h>
-#include <string>
+class FtpPatcher;
 
-using namespace std;
-void showMsg(std::string msg);
-
-class MainWindow
+class MainWindow : public Runnable
 {
 public:
-	MainWindow(HINSTANCE hInstance, std::string caption, int width, int height);
-	virtual ~MainWindow();
+	MainWindow(HINSTANCE hInstance, string caption, int width, int height);
+	~MainWindow();
 
-	int run();
-	virtual LRESULT msgProc(UINT msg, WPARAM wParam, LPARAM lParam);
-
-	void switchScreenMode();
-
-	HINSTANCE				getInstance();
-	HWND					getHwnd();
 private:
-	bool initWindow();
-private:
-	string			mCaption;
-	HINSTANCE		mhInstance;
-	HWND			mhMainWindow;
-	int				mWidth, mHeight;
-
-};	// Class
-
-// Global
-extern MainWindow* gMainWindow;
+	FtpPatcher* mFtpPatcher;
+};

@@ -13,9 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\ftp">
+      <UniqueIdentifier>{779363d6-def5-4477-9479-45490cada40e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="FtpPatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ftp\BlockingSocket.cpp">
+      <Filter>Header Files\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="ftp\FTPClient.cpp">
+      <Filter>Header Files\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="ftp\FTPDataTypes.cpp">
+      <Filter>Header Files\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="ftp\FTPFileState.cpp">
+      <Filter>Header Files\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="ftp\FTPListParse.cpp">
+      <Filter>Header Files\ftp</Filter>
+    </ClCompile>
+    <ClCompile Include="Runnable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainWindow.cpp">
@@ -23,6 +44,36 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FtpPatcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ftp\BlockingSocket.h">
+      <Filter>Header Files\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="ftp\Definements.h">
+      <Filter>Header Files\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="ftp\FTPClient.h">
+      <Filter>Header Files\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="ftp\FTPDataTypes.h">
+      <Filter>Header Files\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="ftp\FTPFileState.h">
+      <Filter>Header Files\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="ftp\FTPListParse.h">
+      <Filter>Header Files\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="ftp\rc_smart_ptr.h">
+      <Filter>Header Files\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="ftp\stdafx.h">
+      <Filter>Header Files\ftp</Filter>
+    </ClInclude>
+    <ClInclude Include="Runnable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="MainWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>

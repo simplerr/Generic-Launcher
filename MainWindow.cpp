@@ -1,116 +1,33 @@
 #include "MainWindow.h"
+#include "FtpPatcher.h"
 
-LRESULT CALLBACK
-MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
+// Set the globals.
+Runnable*	gMainWindow		= 0;
+
+//! The program starts here.
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
-	// Don't start processing messages until the application has been created.
-	if(gMainWindow != NULL )
-		return gMainWindow->msgProc(msg, wParam, lParam);
-	else
-		return DefWindowProc(hwnd, msg, wParam, lParam);
+	// Enable run-time memory check for debug builds.
+	#if defined(DEBUG) | defined(_DEBUG)
+		_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+	#endif
+
+	MainWindow window(hInstance, "Generic Launcher", 700, 500);
+	gMainWindow = &window;
+
+	return gMainWindow->run();
 }
 
-MainWindow::MainWindow(HINSTANCE hInstance, std::string caption, int width, int height)
+MainWindow::MainWindow(HINSTANCE hInstance, string caption, int width, int height)
+	: Runnable(hInstance, caption, width, height)
 {
-	mCaption		= caption;
-	mhInstance		= hInstance;
-	mhMainWindow	= NULL;
-	mWidth			= width;
-	mHeight			= height;
+	mFtpPatcher = new FtpPatcher();
 
-	// Init the window.
-	initWindow();
-}
-
-bool MainWindow::initWindow()
-{
-	WNDCLASS wc;
-	wc.style         = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc   = MainWndProc; 
-	wc.cbClsExtra    = 0;
-	wc.cbWndExtra    = 0;
-	wc.hInstance     = mhInstance;
-	wc.hIcon         = LoadIcon(0, IDI_APPLICATION);
-	wc.hCursor       = LoadCursor(0, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-	wc.lpszMenuName  = 0;
-	wc.lpszClassName = "D3DWndClassName";
-
-	if( !RegisterClass(&wc) )
-	{
-		MessageBox(0, "RegisterClass FAILED", 0, 0);
-		PostQuitMessage(0);
-	}
-
-	// Create the window with a custom size and make it centered
-	// NOTE: WS_CLIPCHILDREN Makes the area under child windows not be displayed. (Useful when rendering DirectX and using windows controls).
-	RECT R = {0, 0, mWidth, mHeight};
-	AdjustWindowRect(&R, WS_OVERLAPPEDWINDOW, false);
-	mhMainWindow = CreateWindow("D3DWndClassName", mCaption.c_str(), 
-		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_CLIPCHILDREN, GetSystemMetrics(SM_CXSCREEN)/2-(mWidth/2),
-		GetSystemMetrics(SM_CYSCREEN)/2-(mHeight/2), mWidth, mHeight, 
-		0, 0, mhInstance, 0); 
-
-	if(!mhMainWindow )
-	{
-		MessageBox(0, "CreateWindow FAILED", 0, 0);
-		PostQuitMessage(0);
-	}
-
-	ShowWindow(mhMainWindow, SW_SHOW);
-	UpdateWindow(mhMainWindow);
-
-	return true;
-}
-
-MainWindow::~MainWindow()
-{
-
-}
-
-// The message loop.
-int MainWindow::run()
-{
-	float time = 0.0f;
-	MSG  msg;
-    msg.message = WM_NULL;
-
-	__int64 cntsPerSec = 0;
-	QueryPerformanceFrequency((LARGE_INTEGER*)&cntsPerSec);
-	float secsPerCnt = 1.0f / (float)cntsPerSec;
-
-	__int64 prevTimeStamp = 0;
-	QueryPerformanceCounter((LARGE_INTEGER*)&prevTimeStamp);
-
-	while(msg.message != WM_QUIT)
-	{
-		// If there are Window messages then process them
-		if(PeekMessage( &msg, 0, 0, 0, PM_REMOVE ))
-		{
-            TranslateMessage( &msg );
-            DispatchMessage( &msg );
-		}
-    }
-	return (int)msg.wParam;
-}
-
-// Handles all window messages.
-LRESULT MainWindow::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
-{
-	return DefWindowProc(getHwnd(), msg, wParam, lParam);
-}
-
-void MainWindow::switchScreenMode()
-{
-
-}
-
-HINSTANCE MainWindow::getInstance()
-{
-	return mhInstance;
+	if(mFtpPatcher->NewVersion())
+		mFtpPatcher->DownloadAll("/simplers.org/data/", "data/");
 }
 	
-HWND MainWindow::getHwnd()
+MainWindow::~MainWindow()
 {
-	return mhMainWindow;
+	delete mFtpPatcher;
 }
