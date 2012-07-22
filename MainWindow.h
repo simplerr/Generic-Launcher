@@ -13,8 +13,6 @@ public:
 	virtual ~MainWindow();
 
 	int run();
-
-	// Handels all window messages. Gets connected in Engine::initWindow().
 	virtual LRESULT msgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 
 	void switchScreenMode();
