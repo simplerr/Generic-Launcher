@@ -42,10 +42,29 @@ MainWindow::MainWindow(HINSTANCE hInstance, string caption, int width, int heigh
 		cout << "Starting application..." << endl;
 	}
 	
+	if(!LaunchApp("F:\\Windows\\System32\\notepad.exe"))
+		cout << "Error launching application!" << endl;
+
+	FreeConsole();
+
 	cin.get();
 }
 	
 MainWindow::~MainWindow()
 {
 	delete mFtpPatcher;
+}
+
+// Starts the specified application.
+bool MainWindow::LaunchApp(string name)
+{
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+
+	// Create the process.
+	return CreateProcess(name.c_str(), NULL, NULL, NULL, false, 0, NULL, NULL, &si, &pi);
 }
