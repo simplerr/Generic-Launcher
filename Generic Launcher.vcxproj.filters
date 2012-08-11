@@ -16,6 +16,9 @@
     <Filter Include="Header Files\ftp">
       <UniqueIdentifier>{779363d6-def5-4477-9479-45490cada40e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\zip">
+      <UniqueIdentifier>{061cbe42-5ef9-4cb4-a815-296a96e9166a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FtpPatcher.cpp">
@@ -36,10 +39,31 @@
     <ClCompile Include="ftp\FTPListParse.cpp">
       <Filter>Header Files\ftp</Filter>
     </ClCompile>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PatcherDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Runnable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainWindow.cpp">
+    <ClCompile Include="Helpers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zip_utils_src\unzip.cpp">
+      <Filter>Source Files\zip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\zip_utils_src\zip.cpp">
+      <Filter>Source Files\zip</Filter>
+    </ClCompile>
+    <ClCompile Include="FtpHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,11 +95,34 @@
     <ClInclude Include="ftp\stdafx.h">
       <Filter>Header Files\ftp</Filter>
     </ClInclude>
-    <ClInclude Include="Runnable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MainWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PatcherDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Runnable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FtpHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Data.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Generic Launcher.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

@@ -7,21 +7,23 @@
 using namespace std;
 void showMsg(std::string msg);
 
+//! Inits the window and contains the main loop.
 class Runnable
 {
 public:
 	Runnable(HINSTANCE hInstance, string caption, int width, int height);
 	virtual ~Runnable();
 
-	int run();
-	virtual LRESULT msgProc(UINT msg, WPARAM wParam, LPARAM lParam);
+	int Run();
+	virtual void Init() {};
+	virtual LRESULT MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 
-	void switchScreenMode();
+	void SetVisible(bool visible);
+	void SwitchScreenMode();
 
-	HINSTANCE				getInstance();
-	HWND					getHwnd();
-private:
-	bool initWindow();
+	bool					InitWindow();
+	HINSTANCE				GetInstance();
+	HWND					GetHwnd();
 private:
 	string			mCaption;
 	HINSTANCE		mhInstance;

@@ -1,34 +1,50 @@
+// Use Windows 7 looking controls.
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
+processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 #include <iostream>
+#define WIN32_LEAN_AND_MEAN
+#include <Richedit.h>
+#include <Commctrl.h>
 #include "MainWindow.h"
 #include "FtpPatcher.h"
+#include "PatcherDialog.h"
+#include "FtpHandler.h"
 
 // Set the globals.
 Runnable*	gMainWindow		= 0;
+FtpHandler* gFtpHandler		= 0;
 
 using namespace std;
 
 //! The program starts here.
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
+	InitCommonControls();
+	LoadLibrary("riched32.dll");
+
 	// Enable run-time memory check for debug builds.
 	#if defined(DEBUG) | defined(_DEBUG)
 		_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 	#endif
 
-	AllocConsole();
+	//AllocConsole();
 
 	MainWindow window(hInstance, "Generic Launcher", 700, 500);
 	gMainWindow = &window;
 
-	return gMainWindow->run();
+	window.Init();
+
+	return gMainWindow->Run();
 }
 
 MainWindow::MainWindow(HINSTANCE hInstance, string caption, int width, int height)
 	: Runnable(hInstance, caption, width, height)
 {
-	mFtpPatcher = new FtpPatcher();
+	gFtpHandler = new FtpHandler("data");
 
-	cout << "Generic Launcher v1.0" << endl;
+	/*cout << "Generic Launcher v1.0" << endl;
 	cout << "Comparing versions..." << endl;
 
 	if(mFtpPatcher->NewVersion()) {
@@ -47,12 +63,17 @@ MainWindow::MainWindow(HINSTANCE hInstance, string caption, int width, int heigh
 
 	FreeConsole();
 
-	cin.get();
+	cin.get();*/
 }
 	
 MainWindow::~MainWindow()
 {
-	delete mFtpPatcher;
+	delete gFtpHandler;
+}
+
+void MainWindow::Init()
+{
+	mPatcherDialog = new PatcherDialog();
 }
 
 // Starts the specified application.

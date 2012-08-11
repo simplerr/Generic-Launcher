@@ -5,7 +5,7 @@ MainWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	// Don't start processing messages until the application has been created.
 	if(gMainWindow != NULL )
-		return gMainWindow->msgProc(msg, wParam, lParam);
+		return gMainWindow->MsgProc(msg, wParam, lParam);
 	else
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 }
@@ -19,7 +19,7 @@ Runnable::Runnable(HINSTANCE hInstance, std::string caption, int width, int heig
 	mHeight			= height;
 
 	// Init the window.
-	//initWindow();
+	InitWindow();
 }
 
 Runnable::~Runnable()
@@ -27,7 +27,7 @@ Runnable::~Runnable()
 
 }
 
-bool Runnable::initWindow()
+bool Runnable::InitWindow()
 {
 	WNDCLASS wc;
 	wc.style         = CS_HREDRAW | CS_VREDRAW;
@@ -56,20 +56,20 @@ bool Runnable::initWindow()
 		GetSystemMetrics(SM_CYSCREEN)/2-(mHeight/2), mWidth, mHeight, 
 		0, 0, mhInstance, 0); 
 
-	if(!mhMainWindow )
+	if(!mhMainWindow)
 	{
 		MessageBox(0, "CreateWindow FAILED", 0, 0);
 		PostQuitMessage(0);
 	}
 
-	ShowWindow(mhMainWindow, SW_SHOW);
+	//ShowWindow(mhMainWindow, SW_HIDE);
 	UpdateWindow(mhMainWindow);
 
 	return true;
 }
 
 // The message loop.
-int Runnable::run()
+int Runnable::Run()
 {
 	float time = 0.0f;
 	MSG  msg;
@@ -85,32 +85,40 @@ int Runnable::run()
 	while(msg.message != WM_QUIT)
 	{
 		// If there are Window messages then process them
-		if(PeekMessage( &msg, 0, 0, 0, PM_REMOVE ))
+		if(PeekMessage(&msg, 0, 0, 0, PM_REMOVE ))
 		{
-            TranslateMessage( &msg );
-            DispatchMessage( &msg );
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 		}
     }
 	return (int)msg.wParam;
 }
 
 // Handles all window messages.
-LRESULT Runnable::msgProc(UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT Runnable::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	return DefWindowProc(getHwnd(), msg, wParam, lParam);
+	return DefWindowProc(GetHwnd(), msg, wParam, lParam);
 }
 
-void Runnable::switchScreenMode()
+void Runnable::SwitchScreenMode()
 {
 
 }
 
-HINSTANCE Runnable::getInstance()
+HINSTANCE Runnable::GetInstance()
 {
 	return mhInstance;
 }
 	
-HWND Runnable::getHwnd()
+HWND Runnable::GetHwnd()
 {
 	return mhMainWindow;
+}
+
+void Runnable::SetVisible(bool visible)
+{
+	if(visible)
+		ShowWindow(mhMainWindow, SW_SHOW);
+	else
+		ShowWindow(mhMainWindow, SW_HIDE);
 }
