@@ -8,6 +8,7 @@
 #include "Helpers.h"
 #include "FtpHandler.h"
 #include "Data.h"
+#include "unzip.h"
 
 // Procedure for the dialog box.
 LRESULT CALLBACK PatcherDlgProc(HWND hWndDlg, UINT Msg, WPARAM wParam, LPARAM lParam)
@@ -42,18 +43,7 @@ PatcherDialog::PatcherDialog()
 	AddText("Starting Auto Patcher v1.0...\n");
 	AddText("Comparing versions...\n");
 
-	if(gFtpHandler->NewVersion()) {
-		AddText("New version found!\n");
-		AddText("Downloading...\n");
-		Data data("data.txt");
-		DownloadLatest(data.directory);
-		AddText("Extracting archive...\n");
-		ExtractArchive("data/");
-		AddText("Latest version downloaded and ready!\n");
-	}
-	else {
-		AddText("Latest version found!\n");
-	}
+	UpdateClient();
 }
 	
 PatcherDialog::~PatcherDialog()
@@ -61,9 +51,51 @@ PatcherDialog::~PatcherDialog()
 
 }
 
+void PatcherDialog::UpdateClient()
+{
+	if(gFtpHandler->NewVersion()) {
+		AddText("New version found!\n");
+		AddText("Downloading...\n");
+		Data data("data.txt");
+		DownloadLatest(data.directory);
+		AddText("Extracting archive...\n");
+		ExtractArchive("");
+		remove("data.zip");
+		AddText("Latest version downloaded and ready!\n");
+		data.ReadInformation("data.txt");
+		AddText("Starting " + data.executable + "...\n");
+		Sleep(1500);
+		LaunchApp("data/" + data.executable); // [NOTE]  "data/"
+		EndDialog(GetHwnd(), 0);
+		PostQuitMessage(0);
+	}
+	else {
+		AddText("Latest version found!\n");
+		//Sleep(1000);
+		Data data("data.txt");
+		LaunchApp("data/" + data.executable); // [NOTE]  "data/"
+		EndDialog(GetHwnd(), 0);
+		PostQuitMessage(0);
+	}
+}
+
+bool PatcherDialog::LaunchApp(string app)
+{
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+
+	// Create the process.
+	return CreateProcess(app.c_str(), NULL, NULL, NULL, false, 0, NULL, NULL, &si, &pi);
+}
+
 void PatcherDialog::AddText(string text, COLORREF color)
 {
 	AddEditText(GetDlgItem(GetHwnd(), IDC_ACTION_LOG), text, color);
+	Sleep(250);
 }
 
 LRESULT PatcherDialog::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
@@ -92,10 +124,23 @@ void PatcherDialog::DownloadLatest(string folder)
 {
 	// Download the data.txt and data.zip files.
 	gFtpHandler->DownloadFile("data.txt", "data.txt");
-	gFtpHandler->DownloadFile("data.zip", "data/data.zip");
+	gFtpHandler->DownloadFile("data.zip", "data.zip");
 }
 
 void PatcherDialog::ExtractArchive(string dest)
 {
+	HZIP hz = OpenZip("data.zip", 0);
+	ZIPENTRY ze;
+	GetZipItem(hz, -1, &ze);
+	int items = ze.index;
 
+	for(int zi = 0; zi < items; zi++)
+	{
+		ZIPENTRY ze;
+		GetZipItem(hz, zi, &ze);
+		string dst = dest + ze.name;
+		UnzipItem(hz, zi, dst.c_str());
+	}
+
+	CloseZip(hz);
 }
