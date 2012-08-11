@@ -52,7 +52,7 @@ MainWindow::MainWindow(HINSTANCE hInstance, string caption, int width, int heigh
 	// Is there a new version on the FTP server?
 	if(!gFtpHandler->NewVersion() && 0)
 	{
-		Data data("data.txt");
+		Data data(CREDENTIALS_FILE);
 		LaunchApp(LOCAL_FOLDER + data.executable);
 		PostQuitMessage(0);
 		mExiting = true;

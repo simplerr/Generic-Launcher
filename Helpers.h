@@ -7,7 +7,7 @@
 using namespace std;
 
 #define ID_GENERATE_FILE 2001
-#define CREDENTIALS_FILE "data.txt"
+#define CREDENTIALS_FILE "data.sef"
 #define LOCAL_FOLDER "app/"
 
 //! Structure with information about an zipped archive.

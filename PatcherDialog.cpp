@@ -47,7 +47,6 @@ PatcherDialog::PatcherDialog()
 	gFtpHandler->SetObserver(mObserver);
 
 	AddText("Starting Auto Patcher v1.0\nComparing versions...\n");
-	//AddText("Comparing versions...\n");
 
 	UpdateClient();
 }
@@ -62,7 +61,7 @@ void PatcherDialog::UpdateClient()
 	if(gFtpHandler->NewVersion()) {
 		AddText("New version found!\n");
 		AddText("Downloading...\n");
-		Data data("data.txt");
+		Data data(CREDENTIALS_FILE);
 		DownloadLatest(data.directory);
 		AddText("Extracting archive...\n");
 		ExtractArchive("");
@@ -72,13 +71,13 @@ void PatcherDialog::UpdateClient()
 		// Enable the Run button.
 		EnableWindow(GetDlgItem(GetHwnd(), IDC_RUN), TRUE);
 
-		data.ReadInformation("data.txt");
+		data.ReadInformation(CREDENTIALS_FILE);
 		AddText("Press \"Run\" to start " + data.executable +" \n");
 	}
 	else {
 		AddText("Latest version found!\n");
-		Sleep(1000);
-		Data data("data.txt");
+		Sleep(500);
+		Data data(CREDENTIALS_FILE);
 		LaunchApp(LOCAL_FOLDER + data.executable);
 		EndDialog(GetHwnd(), 0);
 		PostQuitMessage(0);
@@ -94,7 +93,7 @@ void PatcherDialog::AddText(string text, COLORREF color)
 LRESULT PatcherDialog::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	if(msg == IDC_RUN) {
-		Data data("data.txt");
+		Data data(CREDENTIALS_FILE);
 		LaunchApp(LOCAL_FOLDER + data.executable); 
 		EndDialog(GetHwnd(), 0);
 		PostQuitMessage(0);	
@@ -124,7 +123,7 @@ void PatcherDialog::SetFileSize(long size)
 void PatcherDialog::DownloadLatest(string folder)
 {
 	// Download the data.txt and data.zip files.
-	gFtpHandler->DownloadFile("data.txt", "data.txt");
+	gFtpHandler->DownloadFile(CREDENTIALS_FILE, CREDENTIALS_FILE);
 	gFtpHandler->DownloadFile("data.zip", "data.zip");
 }
 

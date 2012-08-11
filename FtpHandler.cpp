@@ -62,10 +62,10 @@ bool FtpHandler::NewVersion()
 	remove("tmp.txt");
 
 	// Compare the version files.
-	mFtpClient.DownloadFile(mWorkingDirectory + "data.txt", "tmp.txt", CType::Image(), true); 
+	mFtpClient.DownloadFile(mWorkingDirectory + CREDENTIALS_FILE, "tmp.txt", CType::Image(), true); 
 
 	Data ftpData("tmp.txt");
-	Data userData("data.txt");
+	Data userData(CREDENTIALS_FILE);
 
 	remove("tmp.txt");
 
@@ -121,7 +121,7 @@ void FtpHandler::UploadFile(string dest, string file)
 // Loads the login credentials from a text file.
 void FtpHandler::LoadCredentials(string file)
 {
-	Data data("data.txt");
+	Data data(CREDENTIALS_FILE);
 	mHost = data.hostname;
 	mUser = data.username;
 	mPass = data.password;
@@ -133,11 +133,12 @@ int FtpHandler::GetVersion()
 	remove("tmp.txt");
 
 	// Download the info.txt file
-	if(!mFtpClient.DownloadFile(mWorkingDirectory + "data.txt", "tmp.txt", CType::Image(), true)) 
+	if(!mFtpClient.DownloadFile(mWorkingDirectory + CREDENTIALS_FILE, "tmp.txt", CType::Image(), true)) 
 		return 0;
 
 	// Read the version.
 	Data data("tmp.txt");
+	remove("tmp.txt");
 	return data.version;
 }
 	
@@ -146,11 +147,12 @@ int FtpHandler::GetNumFiles()
 	remove("tmp.txt");
 
 	// Download the info.txt file.
-	if(!mFtpClient.DownloadFile(mWorkingDirectory + "data.txt", "tmp.txt", CType::Image(), true)) 
+	if(!mFtpClient.DownloadFile(mWorkingDirectory + CREDENTIALS_FILE, "tmp.txt", CType::Image(), true)) 
 		return 0;
 
 	// Read num files.
 	Data data("tmp.txt");
+	remove("tmp.txt");
 	return data.files;
 }
 	
@@ -159,11 +161,12 @@ int FtpHandler::GetTotalSize()
 	remove("tmp.txt");
 
 	// Download the info.txt file.
-	if(!mFtpClient.DownloadFile(mWorkingDirectory + "data.txt", "tmp.txt", CType::Image(), true)) 
+	if(!mFtpClient.DownloadFile(mWorkingDirectory + CREDENTIALS_FILE, "tmp.txt", CType::Image(), true)) 
 		return 0;
 		
 	// Read total size.
 	Data data("tmp.txt");
+	remove("tmp.txt");
 	return data.size;
 }
 
@@ -172,11 +175,12 @@ string FtpHandler::GetModifyDate()
 	remove("tmp.txt");
 
 	// Download the info.txt file.
-	if(!mFtpClient.DownloadFile(mWorkingDirectory + "data.txt", "tmp.txt", CType::Image(), true)) 
+	if(!mFtpClient.DownloadFile(mWorkingDirectory + CREDENTIALS_FILE, "tmp.txt", CType::Image(), true)) 
 		return "never";
 
 	// Read the modify date.
 	Data data("tmp.txt");
+	remove("tmp.txt");
 	return data.modifyDate;
 }
 
