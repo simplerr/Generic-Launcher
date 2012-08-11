@@ -12,6 +12,7 @@ public:
 
 	void Init();
 	bool LaunchApp(string name);
+	LRESULT MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
 private:
 	PatcherDialog* mPatcherDialog;
 };

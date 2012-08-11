@@ -11,6 +11,7 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #include "FtpPatcher.h"
 #include "PatcherDialog.h"
 #include "FtpHandler.h"
+#include "resource.h"
 
 // Set the globals.
 Runnable*	gMainWindow		= 0;
@@ -43,6 +44,7 @@ MainWindow::MainWindow(HINSTANCE hInstance, string caption, int width, int heigh
 	: Runnable(hInstance, caption, width, height)
 {
 	gFtpHandler = new FtpHandler("data");
+	mPatcherDialog = NULL;
 
 	/*cout << "Generic Launcher v1.0" << endl;
 	cout << "Comparing versions..." << endl;
@@ -88,4 +90,17 @@ bool MainWindow::LaunchApp(string name)
 
 	// Create the process.
 	return CreateProcess(name.c_str(), NULL, NULL, NULL, false, 0, NULL, NULL, &si, &pi);
+}
+
+LRESULT MainWindow::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
+{
+	if(msg == IDM_LOADED)
+		mPatcherDialog->UpdateClient();
+
+	// Let the current state handle the message.
+	if(mPatcherDialog != NULL)
+		mPatcherDialog->MsgProc(msg, wParam, lParam);
+
+	// Default MsgProc.
+	return Runnable::MsgProc(msg, wParam, lParam);
 }
