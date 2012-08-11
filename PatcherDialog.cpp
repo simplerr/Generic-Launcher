@@ -46,8 +46,8 @@ PatcherDialog::PatcherDialog()
 	mObserver->SetDialog(this);
 	gFtpHandler->SetObserver(mObserver);
 
-	AddText("Starting Auto Patcher v1.0...\n");
-	AddText("Comparing versions...\n");
+	AddText("Starting Auto Patcher v1.0\nComparing versions...\n");
+	//AddText("Comparing versions...\n");
 
 	UpdateClient();
 }
@@ -77,25 +77,12 @@ void PatcherDialog::UpdateClient()
 	}
 	else {
 		AddText("Latest version found!\n");
-		//Sleep(1000);
+		Sleep(1000);
 		Data data("data.txt");
-		LaunchApp("data/" + data.executable); // [NOTE]  "data/"
+		LaunchApp(LOCAL_FOLDER + data.executable);
 		EndDialog(GetHwnd(), 0);
 		PostQuitMessage(0);
 	}
-}
-
-bool PatcherDialog::LaunchApp(string app)
-{
-	STARTUPINFO si;
-	PROCESS_INFORMATION pi;
-
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-	ZeroMemory(&pi, sizeof(pi));
-
-	// Create the process.
-	return CreateProcess(app.c_str(), NULL, NULL, NULL, false, 0, NULL, NULL, &si, &pi);
 }
 
 void PatcherDialog::AddText(string text, COLORREF color)
@@ -106,11 +93,9 @@ void PatcherDialog::AddText(string text, COLORREF color)
 
 LRESULT PatcherDialog::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if(msg == IDM_LOADED)
-		int asda = 1;
-	else if(msg == IDC_RUN) {
+	if(msg == IDC_RUN) {
 		Data data("data.txt");
-		LaunchApp("data/" + data.executable); 
+		LaunchApp(LOCAL_FOLDER + data.executable); 
 		EndDialog(GetHwnd(), 0);
 		PostQuitMessage(0);	
 	}

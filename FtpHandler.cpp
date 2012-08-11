@@ -31,7 +31,7 @@ void ProgressObserver::OnBytesSent(const TByteVector& vBuffer, long lSentBytes)
 	mDialog->AddBytesSent(lSentBytes);
 }
 
-FtpHandler::FtpHandler(string localDirectory)
+FtpHandler::FtpHandler()
 {
 	WORD wVersionRequested;
 	WSADATA wsaData;
@@ -48,8 +48,6 @@ FtpHandler::FtpHandler(string localDirectory)
 	// Attempt to login.
 	if(!mFtpClient.Login(logonInfo))
 		MessageBox(0, "Can't connect to server.", "Connection error", 0);
-
-	mLocalDirectory = localDirectory;
 }
 
 FtpHandler::~FtpHandler()

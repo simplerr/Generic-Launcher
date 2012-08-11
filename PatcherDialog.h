@@ -13,7 +13,6 @@ public:
 	~PatcherDialog();
 
 	void UpdateClient();
-	bool LaunchApp(string app);
 	void DownloadLatest(string folder);
 	void ExtractArchive(string dest);
 	void AddText(string text, COLORREF color = RGB(0, 0, 0));

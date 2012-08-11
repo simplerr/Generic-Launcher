@@ -8,6 +8,7 @@ using namespace std;
 
 #define ID_GENERATE_FILE 2001
 #define CREDENTIALS_FILE "data.txt"
+#define LOCAL_FOLDER "app/"
 
 //! Structure with information about an zipped archive.
 struct ArchiveInfo
@@ -18,6 +19,9 @@ struct ArchiveInfo
 	int files;
 	long size;
 };
+
+//! Launches an .exe file.
+void LaunchApp(string app);
 
 //! Adds text to a richedit control.
 void AddEditText(HWND hwnd, string text, COLORREF crNewColor = RGB(0, 0, 0));

@@ -12,6 +12,8 @@ processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
 #include "PatcherDialog.h"
 #include "FtpHandler.h"
 #include "resource.h"
+#include "Data.h"
+#include "Helpers.h"
 
 // Set the globals.
 Runnable*	gMainWindow		= 0;
@@ -43,29 +45,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance, PSTR cmdLine, in
 MainWindow::MainWindow(HINSTANCE hInstance, string caption, int width, int height)
 	: Runnable(hInstance, caption, width, height)
 {
-	gFtpHandler = new FtpHandler("data");
+	gFtpHandler = new FtpHandler();
 	mPatcherDialog = NULL;
+	mExiting = false;
 
-	/*cout << "Generic Launcher v1.0" << endl;
-	cout << "Comparing versions..." << endl;
-
-	if(mFtpPatcher->NewVersion()) {
-		cout << "New version found!\nStarting downloading updates...\n" << endl;
-		mFtpPatcher->DownloadAll("/simplers.org/data/", "data/");
-		cout << "Latest version downloaded!" << endl;
-		cout << "Starting application..." << endl;
+	// Is there a new version on the FTP server?
+	if(!gFtpHandler->NewVersion() && 0)
+	{
+		Data data("data.txt");
+		LaunchApp(LOCAL_FOLDER + data.executable);
+		PostQuitMessage(0);
+		mExiting = true;
 	}
-	else {
-		cout << "Latest version already installed..." << endl;
-		cout << "Starting application..." << endl;
-	}
-	
-	if(!LaunchApp("F:\\Windows\\System32\\notepad.exe"))
-		cout << "Error launching application!" << endl;
-
-	FreeConsole();
-
-	cin.get();*/
 }
 	
 MainWindow::~MainWindow()
@@ -75,21 +66,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::Init()
 {
-	mPatcherDialog = new PatcherDialog();
-}
-
-// Starts the specified application.
-bool MainWindow::LaunchApp(string name)
-{
-	STARTUPINFO si;
-	PROCESS_INFORMATION pi;
-
-	ZeroMemory(&si, sizeof(si));
-	si.cb = sizeof(si);
-	ZeroMemory(&pi, sizeof(pi));
-
-	// Create the process.
-	return CreateProcess(name.c_str(), NULL, NULL, NULL, false, 0, NULL, NULL, &si, &pi);
+	if(!mExiting)
+		mPatcherDialog = new PatcherDialog();
 }
 
 LRESULT MainWindow::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)

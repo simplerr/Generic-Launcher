@@ -33,7 +33,7 @@ private:
 class FtpHandler
 {
 public:
-	FtpHandler(string localDirectory);
+	FtpHandler();
 	~FtpHandler();
 
 	bool NewVersion();
@@ -50,7 +50,6 @@ private:
 	CFTPClient mFtpClient;
 	ProgressObserver* mObserver;
 	string mWorkingDirectory;
-	string mLocalDirectory;
 	string mHost, mUser, mPass;
 };
 

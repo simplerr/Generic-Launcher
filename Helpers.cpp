@@ -205,6 +205,20 @@ void CreateArchive(string path, string name, ArchiveInfo& info)
 	CloseZip(hz);
 }
 
+void LaunchApp(string app)
+{
+	STARTUPINFO si;
+	PROCESS_INFORMATION pi;
+
+	ZeroMemory(&si, sizeof(si));
+	si.cb = sizeof(si);
+	ZeroMemory(&pi, sizeof(pi));
+
+	// Create the process.
+	if(!CreateProcess(app.c_str(), NULL, NULL, NULL, false, 0, NULL, NULL, &si, &pi))
+		MessageBox(0, string("Couldn't start " + app).c_str(), "Error starting process!", 0);
+}
+
 void UnzipArchive(string name, string dest)
 {
 	//HZIP hz = OpenZip("data/simple1.zip", 0);
