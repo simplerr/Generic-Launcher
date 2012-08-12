@@ -9,6 +9,7 @@ using namespace std;
 #define ID_GENERATE_FILE 2001
 #define CREDENTIALS_FILE "data.sef"
 #define LOCAL_FOLDER "app/"
+#define PATCH_NOTES_FILE "patch_notes.txt"
 
 //! Structure with information about an zipped archive.
 struct ArchiveInfo
@@ -19,6 +20,9 @@ struct ArchiveInfo
 	int files;
 	long size;
 };
+
+//! Reads all the content from a file into a string.
+string ReadFileContnet(string source);
 
 //! Launches an .exe file.
 void LaunchApp(string app);

@@ -8,6 +8,15 @@
 #include <stack>
 #include "zip.h"
 
+string ReadFileContnet(string source)
+{
+	// Write the patch notes.
+	ifstream ifs(PATCH_NOTES_FILE);
+	string str((istreambuf_iterator<char>(ifs)), istreambuf_iterator<char>());
+	ifs.close();
+	return str;
+}
+
 //! Adds text to a richedit control.
 /**
 @param hwnd Handle to the control.

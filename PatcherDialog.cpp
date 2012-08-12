@@ -1,6 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <Richedit.h>
+#include <fstream>
 #include <Commctrl.h>
 #include "PatcherDialog.h"
 #include "MainWindow.h"
@@ -9,6 +10,8 @@
 #include "FtpHandler.h"
 #include "Data.h"
 #include "unzip.h"
+
+using namespace std;
 
 bool init = false;
 
@@ -68,6 +71,9 @@ void PatcherDialog::UpdateClient()
 		remove("data.zip");
 		AddText("Latest version downloaded and ready!\n");
 
+		string patchNotes = ReadFileContnet(PATCH_NOTES_FILE);
+		AddText("\nPatch notes for version: " + patchNotes + "\n\n");
+
 		// Enable the Run button.
 		EnableWindow(GetDlgItem(GetHwnd(), IDC_RUN), TRUE);
 
@@ -124,6 +130,7 @@ void PatcherDialog::DownloadLatest(string folder)
 {
 	// Download the data.txt and data.zip files.
 	gFtpHandler->DownloadFile(CREDENTIALS_FILE, CREDENTIALS_FILE);
+	gFtpHandler->DownloadFile(PATCH_NOTES_FILE, PATCH_NOTES_FILE);
 	gFtpHandler->DownloadFile("data.zip", "data.zip");
 }
 
