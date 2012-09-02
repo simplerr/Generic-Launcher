@@ -3,6 +3,7 @@
 #include <Richedit.h>
 #include <fstream>
 #include <Commctrl.h>
+#include <process.h>
 #include "PatcherDialog.h"
 #include "MainWindow.h"
 #include "resource.h"
@@ -51,7 +52,8 @@ PatcherDialog::PatcherDialog()
 
 	AddText("Starting Auto Patcher v1.0\nComparing versions...\n");
 
-	UpdateClient();
+	// Start a new thread that downloads the new files.
+	_beginthread(PatcherDialog::UdateThreadEntryPoint,0, this);
 }
 	
 PatcherDialog::~PatcherDialog()
@@ -88,6 +90,12 @@ void PatcherDialog::UpdateClient()
 		EndDialog(GetHwnd(), 0);
 		PostQuitMessage(0);
 	}
+}
+
+void PatcherDialog::UdateThreadEntryPoint(void* pThis)
+{
+	PatcherDialog* dialog = (PatcherDialog*)pThis;
+	dialog->UpdateClient();
 }
 
 void PatcherDialog::AddText(string text, COLORREF color)

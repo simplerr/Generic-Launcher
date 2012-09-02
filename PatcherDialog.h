@@ -20,6 +20,9 @@ public:
 	void AddBytesReceived(long bytes);
 	void SetFileSize(long size);
 	LRESULT MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
+
+	// Static entry point fot the upload thread.
+	static void UdateThreadEntryPoint(void* pThis);
 private:
 	ProgressObserver* mObserver;
 };
