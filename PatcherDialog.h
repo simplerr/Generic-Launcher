@@ -13,8 +13,9 @@ public:
 	~PatcherDialog();
 
 	void UpdateClient();
-	void DownloadLatest(string folder);
+	void DownloadLatest();
 	void ExtractArchive(string dest);
+	void RunApp();
 	void AddText(string text, COLORREF color = RGB(0, 0, 0));
 	void AddBytesSent(long bytes);
 	void AddBytesReceived(long bytes);
@@ -23,6 +24,7 @@ public:
 
 	// Static entry point fot the upload thread.
 	static void UdateThreadEntryPoint(void* pThis);
+	static void RunThreadEntryPoint(void* pThis);
 private:
 	ProgressObserver* mObserver;
 };

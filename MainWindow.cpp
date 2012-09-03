@@ -46,6 +46,7 @@ MainWindow::MainWindow(HINSTANCE hInstance, string caption, int width, int heigh
 	: Runnable(hInstance, caption, width, height)
 {
 	gFtpHandler = new FtpHandler();
+
 	mPatcherDialog = NULL;
 	mExiting = false;
 

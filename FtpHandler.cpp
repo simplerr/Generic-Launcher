@@ -33,6 +33,17 @@ void ProgressObserver::OnBytesSent(const TByteVector& vBuffer, long lSentBytes)
 
 FtpHandler::FtpHandler()
 {
+	
+}
+
+FtpHandler::~FtpHandler()
+{
+	// Logout from the FTP server.
+	mFtpClient.Logout();
+}
+
+bool FtpHandler::Connect()
+{
 	WORD wVersionRequested;
 	WSADATA wsaData;
 
@@ -46,14 +57,7 @@ FtpHandler::FtpHandler()
 	CLogonInfo logonInfo(mHost, 21, mUser, mPass);
 
 	// Attempt to login.
-	if(!mFtpClient.Login(logonInfo))
-		MessageBox(0, "Can't connect to server.", "Connection error", 0);
-}
-
-FtpHandler::~FtpHandler()
-{
-	// Logout from the FTP server.
-	mFtpClient.Logout();
+	return mFtpClient.Login(logonInfo);
 }
 
 // Returns true if there exist a newer version on the FTP server.

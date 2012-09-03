@@ -17,6 +17,7 @@ public:
 	int Run();
 	virtual void Init() {};
 	virtual LRESULT MsgProc(UINT msg, WPARAM wParam, LPARAM lParam);
+	void Kill();
 
 	void SetVisible(bool visible);
 	void SwitchScreenMode();
@@ -29,7 +30,7 @@ private:
 	HINSTANCE		mhInstance;
 	HWND			mhMainWindow;
 	int				mWidth, mHeight;
-
+	bool			mDead;
 };	// Class
 
 // Global

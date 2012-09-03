@@ -46,7 +46,7 @@ void AddEditText(HWND hwnd, string text, COLORREF crNewColor)
 
    iEndPos = GetWindowTextLength(hwnd);
 
-   SendMessage(hwnd, EM_SETSEL, (WPARAM)(int)iStartPos, (LPARAM)(int)iEndPos);
+   SendMessage(hwnd, EM_SETSEL, (WPARAM)(int)iStartPos-2, (LPARAM)(int)iEndPos-3);
    SendMessage(hwnd, EM_SETCHARFORMAT, (WPARAM)(UINT)SCF_SELECTION, (LPARAM)&cf);
    SendMessage(hwnd, EM_HIDESELECTION, (WPARAM)(BOOL)TRUE, (LPARAM)(BOOL)FALSE);
 

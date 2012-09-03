@@ -17,6 +17,7 @@ Runnable::Runnable(HINSTANCE hInstance, std::string caption, int width, int heig
 	mhMainWindow	= NULL;
 	mWidth			= width;
 	mHeight			= height;
+	mDead			= false;
 
 	// Init the window.
 	InitWindow();
@@ -35,7 +36,7 @@ bool Runnable::InitWindow()
 	wc.cbClsExtra    = 0;
 	wc.cbWndExtra    = 0;
 	wc.hInstance     = mhInstance;
-	wc.hIcon         = LoadIcon(0, IDI_APPLICATION);
+	wc.hIcon         = LoadIcon(0, IDI_WINLOGO);
 	wc.hCursor       = LoadCursor(0, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
 	wc.lpszMenuName  = 0;
@@ -82,7 +83,7 @@ int Runnable::Run()
 	__int64 prevTimeStamp = 0;
 	QueryPerformanceCounter((LARGE_INTEGER*)&prevTimeStamp);
 
-	while(msg.message != WM_QUIT)
+	while(msg.message != WM_QUIT && !mDead) // mDead is hack used when exiting from child thread.
 	{
 		// If there are Window messages then process them
 		if(PeekMessage(&msg, 0, 0, 0, PM_REMOVE ))
@@ -92,6 +93,12 @@ int Runnable::Run()
 		}
     }
 	return (int)msg.wParam;
+}
+
+// [HACK]
+void Runnable::Kill()
+{
+	mDead = true;
 }
 
 // Handles all window messages.
