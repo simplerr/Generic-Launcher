@@ -6,13 +6,20 @@ using namespace std;
 
 class ProgressObserver;
 
+enum InitState
+{
+	ERROR_CONNECTING,
+	NEW_VERSION_AVAILABLE
+};
+
 class PatcherDialog : public BaseDialog
 {
 public:
 	PatcherDialog();
 	~PatcherDialog();
 
-	void UpdateClient();
+	void Init(InitState initState);
+
 	void DownloadLatest();
 	void ExtractArchive(string dest);
 	void RunApp();

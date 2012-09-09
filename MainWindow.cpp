@@ -51,13 +51,13 @@ MainWindow::MainWindow(HINSTANCE hInstance, string caption, int width, int heigh
 	mExiting = false;
 
 	// Is there a new version on the FTP server?
-	if(!gFtpHandler->NewVersion() && 0)
+	/*if(!gFtpHandler->NewVersion() && 0)
 	{
 		Data data(CREDENTIALS_FILE);
 		LaunchApp(LOCAL_FOLDER + data.executable);
 		PostQuitMessage(0);
 		mExiting = true;
-	}
+	}*/
 }
 	
 MainWindow::~MainWindow()
@@ -67,15 +67,32 @@ MainWindow::~MainWindow()
 
 void MainWindow::Init()
 {
-	if(!mExiting)
+	// Try to connect.
+	if(!gFtpHandler->Connect()) 
+	{
+		// Show the patcher dialog.
 		mPatcherDialog = new PatcherDialog();
+		mPatcherDialog->Init(ERROR_CONNECTING);
+	}
+	else
+	{
+		// Is there a new version?
+		if(!gFtpHandler->NewVersion()) {
+			Data data(CREDENTIALS_FILE);
+			LaunchApp(LOCAL_FOLDER + data.executable);
+			PostQuitMessage(0);
+			return;
+			
+		}
+		else {
+			mPatcherDialog = new PatcherDialog();
+			mPatcherDialog->Init(NEW_VERSION_AVAILABLE);	
+		}
+	}
 }
 
 LRESULT MainWindow::MsgProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	if(msg == IDM_LOADED)
-		mPatcherDialog->UpdateClient();
-
 	// Let the current state handle the message.
 	if(mPatcherDialog != NULL)
 		mPatcherDialog->MsgProc(msg, wParam, lParam);

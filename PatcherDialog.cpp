@@ -49,27 +49,7 @@ LRESULT CALLBACK PatcherDlgProc(HWND hWndDlg, UINT Msg, WPARAM wParam, LPARAM lP
 PatcherDialog::PatcherDialog()
 	: BaseDialog(IDD_DIALOG1, (DLGPROC)PatcherDlgProc)
 {
-	AddText("Starting Auto Patcher v1.2\n");
-	AddText("Connecting to FTP server...\n");
-
-	// Error connecting to server.
-	if(!gFtpHandler->Connect())
-	{
-		AddText("Error connecting to server!\n", 0x000000ff);
-		AddText("Press the Run button to start your current version.\n");
-		EnableWindow(GetDlgItem(GetHwnd(), IDC_RUN), true); 
-	}
-	else // Successfully connected server.
-	{
-		AddText("Successfully connected to the server!\n", 0x00009900);
-		AddText("Comparing versions...\n");
-		mObserver = new ProgressObserver();
-		mObserver->SetDialog(this);
-		gFtpHandler->SetObserver(mObserver);
-
-		// Start a new thread that downloads the new files.
-		UpdateClient();
-	}
+	
 }
 	
 PatcherDialog::~PatcherDialog()
@@ -77,29 +57,27 @@ PatcherDialog::~PatcherDialog()
 
 }
 
-void PatcherDialog::UpdateClient()
+void PatcherDialog::Init(InitState initState)
 {
-	if(gFtpHandler->NewVersion()) {
+	if(initState == ERROR_CONNECTING) 
+	{
+		AddText("Error connecting to the server!\n");
+		AddText("Press the Run button to start your current version\n");
+		EnableWindow(GetDlgItem(GetHwnd(), IDC_RUN), true); 
+	}
+	else if(initState == NEW_VERSION_AVAILABLE)
+	{
 		AddText("New version found!\n");
 		AddText("Download or run current version?\n");
+
+		mObserver = new ProgressObserver();
+		mObserver->SetDialog(this);
+		gFtpHandler->SetObserver(mObserver);
 
 		// Show the skip and download buttons.
 		EnableWindow(GetDlgItem(GetHwnd(), IDC_DOWNLOAD), true);
 		EnableWindow(GetDlgItem(GetHwnd(), IDC_RUN), true);
 		UpdateWindow(GetHwnd());
-
-		// Let the message queue handle the rest, Skip or Download.
-	}
-	else {
-		Data data(CREDENTIALS_FILE);
-		AddText("Latest version found!\n");
-		AddText("Starting " + data.executable + "...\n");
-		UpdateWindow(GetHwnd());
-		Sleep(2000);
-		
-		LaunchApp(LOCAL_FOLDER + data.executable);
-		EndDialog(GetHwnd(), 0);
-		PostQuitMessage(0);
 	}
 }
 
@@ -118,14 +96,13 @@ void PatcherDialog::RunThreadEntryPoint(void* pThis)
 void PatcherDialog::AddText(string text, COLORREF color)
 {
 	AddEditText(GetDlgItem(GetHwnd(), IDC_ACTION_LOG), text, color);
-	Sleep(250);
 }
 
 void PatcherDialog::RunApp()
 {
 	Data data(CREDENTIALS_FILE);
 	AddText("Starting " + data.executable + "...\n");
-	Sleep(1500.0f);
+	Sleep(1000.0f);
 	LaunchApp(LOCAL_FOLDER + data.executable); 
 	EndDialog(GetHwnd(), 0);
 	PostQuitMessage(0);
@@ -192,7 +169,7 @@ void PatcherDialog::DownloadLatest()
 	AddText("Latest version downloaded and ready!\n");
 
 	string patchNotes = ReadFileContnet(PATCH_NOTES_FILE);
-	AddText("\nPatch notes for version: " + patchNotes + "\n\n");
+	AddText("Patch notes for version: " + patchNotes + "\n\n");
 
 	// Enable the Run button.
 	EnableWindow(GetDlgItem(GetHwnd(), IDC_RUN), true);

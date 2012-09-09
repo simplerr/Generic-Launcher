@@ -224,7 +224,7 @@ void LaunchApp(string app)
 	ZeroMemory(&pi, sizeof(pi));
 
 	// Create the process.
-	if(!CreateProcess(app.c_str(), NULL, NULL, NULL, false, 0, NULL, NULL, &si, &pi))
+	if(!CreateProcess(app.c_str(), NULL, NULL, NULL, false, 0, NULL, "app/", &si, &pi))
 		MessageBox(0, string("Couldn't start " + app).c_str(), "Error starting process!", 0);
 }
 
