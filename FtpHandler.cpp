@@ -1,5 +1,6 @@
 #include <fstream>
 #include <iostream>
+#include <process.h>
 #include "FtpHandler.h"
 #include "Helpers.h"
 #include "PatcherDialog.h"
@@ -105,11 +106,19 @@ void FtpHandler::DownloadFile(string file, string dest)
 	string ftpFilename = mWorkingDirectory + file;
 	remove(dest.c_str());
 
+	long size;
+	mFtpClient.FileSize(ftpFilename, size);
+	mObserver->SetFileSize(size);
+	
+	mObserver->SetStatus("- " + file + "\n");
+
 	if(!mFtpClient.DownloadFile(ftpFilename, dest, CType::Image(), true))
 		MessageBox(0, "Error downloading file.", "Download error!", 0);
-	else {
-		mObserver->SetStatus("- " + file + "\n");
-	}
+}
+
+void FtpHandler::RunDownloadThread(void* pThis)
+{
+
 }
 
 void FtpHandler::UploadFile(string dest, string file)

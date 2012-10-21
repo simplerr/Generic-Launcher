@@ -34,4 +34,6 @@ public:
 	static void RunThreadEntryPoint(void* pThis);
 private:
 	ProgressObserver* mObserver;
+	long mFileSize;
+	long mBytesReceived;
 };

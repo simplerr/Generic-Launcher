@@ -145,12 +145,18 @@ void PatcherDialog::AddBytesReceived(long bytes)
 {
 	long pos = SendDlgItemMessage(GetHwnd(), IDC_PROGRESS, PBM_GETPOS, 0, 0);
 	SendDlgItemMessage(GetHwnd(), IDC_PROGRESS, PBM_SETPOS, pos + bytes, 0);
+	mBytesReceived += bytes;
+	char buffer[256];
+	sprintf(buffer, "%.1f/%.1fmb", (float)mBytesReceived/1000000, (float)mFileSize/1000000);
+	SetWindowText(GetDlgItem(GetHwnd(), IDC_DOWNLOADED), buffer); 
 }
 
 void PatcherDialog::SetFileSize(long size)
 {
 	SendDlgItemMessage(GetHwnd(), IDC_PROGRESS, PBM_SETRANGE32 , 0, size);
 	SendDlgItemMessage(GetHwnd(), IDC_PROGRESS, PBM_SETPOS, 0, 0);
+	mFileSize = size;
+	mBytesReceived = 0;
 }
 
 void PatcherDialog::DownloadLatest()

@@ -47,6 +47,7 @@ public:
 	int GetTotalSize();
 	string GetModifyDate();
 	void SetObserver(ProgressObserver* observer);
+	static void RunDownloadThread(void* pThis);
 private:
 	CFTPClient mFtpClient;
 	ProgressObserver* mObserver;
